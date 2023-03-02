@@ -20,7 +20,7 @@ function sj(){
 }
 var sendTime = 0;
 var isClick = false;
-var questionContent = "";
+var questionContentArr = [];
 
 
 $(function(){
@@ -71,15 +71,21 @@ function test(){
 
 
 function post(msgData){
-		questionContent = questionContent + msgData +"\n";
+		questionContentArr.push({
+			"role":"user",
+			"content":msgData,
+		})
 		axios.post('/api/api.php', {
-					body:questionContent,
+					body:questionContentArr,
 				}, {
 					headers: { 'content-type': 'application/json' }
 				}).then(res => {
 					console.log(res);
-					let text = res.data.choices[0].text.replace("openai:", "").replace("openai：", "").replace(/^\n|\n$/g, "")
-				       questionContent = questionContent + text + "\n";
+					let text = res.data.choices[0].message.content.replace("openai:", "").replace("openai：", "").replace(/^\n|\n$/g, "")
+				    	questionContentArr.push({
+							"role":res.data.choices[0].message.role,
+							"content":text,
+						})
 					   send("images/touxiang.png",text);
 					   $(".tit").html("ChatGpt");
 					   isClick = false;

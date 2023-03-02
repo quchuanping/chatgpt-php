@@ -9,10 +9,8 @@ if (!empty($params['body'])) {
 }
 
 $data = array(
-    "model"=>"text-davinci-003",
-  "prompt"=> $body,
-  "max_tokens"=> 1024,
-  "temperature"=> 0,
+    "model"=>"gpt-3.5-turbo",
+    "messages"=>$body
 );
 
 function apiPost($url,$apiKey, array $params = array(),$timeout=30)
@@ -49,7 +47,7 @@ function apiPost($url,$apiKey, array $params = array(),$timeout=30)
 
 $apiKey = getConfig()["apikey"];
 
-$response = apiPost("https://api.openai.com/v1/completions",$apiKey,$data);
+$response = apiPost("https://api.openai.com/v1/chat/completions",$apiKey,$data);
 echo $response;
 die();
 
